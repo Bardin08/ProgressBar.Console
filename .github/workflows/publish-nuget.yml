@@ -1,0 +1,39 @@
+﻿name: Build and Publish NuGet
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-push:
+    env:
+      PROJECT_PATH: './ProgressBar.Console/ProgressBar.Console.csproj'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Determine Version
+        run: |
+          RELEASE_VERSION=$(echo "${{ github.event.release.tag_name }}" | cut -c 2-)
+          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
+          echo "NuGet Package version: ${RELEASE_VERSION}"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ${{ env.PROJECT_PATH }} --no-restore --verbosity normal
+
+      - name: Pack
+        run: dotnet pack  ${{ env.PROJECT_PATH }} --configuration Release --no-build --output nupkgs /p:PackageVersion=${{ env.RELEASE_VERSION }}
+
+      - name: Push to NuGet
+        run: dotnet nuget push "nupkgs/**/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
