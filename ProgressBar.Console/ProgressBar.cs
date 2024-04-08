@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace ProgressBar.Console
+namespace Bardin08.ProgressBar
 {
     public class ProgressBar
     {

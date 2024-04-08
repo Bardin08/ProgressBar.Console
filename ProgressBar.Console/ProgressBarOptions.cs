@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProgressBar.Console
+namespace Bardin08.ProgressBar
 {
     /// <summary>
     /// Represents options for customizing a console progress bar.

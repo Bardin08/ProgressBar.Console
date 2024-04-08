@@ -2,6 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>Bardin08.ProgressBar</AssemblyName>
+        <RootNamespace>Bardin08.ProgressBar</RootNamespace>
     </PropertyGroup>
 
 </Project>
